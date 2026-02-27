@@ -84,6 +84,23 @@ export type QueryArticlesArgs = {
   title?: InputMaybe<Scalars["String"]["input"]>;
 };
 
+export type GetArticleByIdQueryVariables = Exact<{
+  id: Scalars["Float"]["input"];
+}>;
+
+export type GetArticleByIdQuery = {
+  __typename?: "Query";
+  article?: {
+    __typename?: "Article";
+    id: number;
+    title: string;
+    body: string;
+    mainPictureUrl: string;
+    updatedAt: any;
+    category: { __typename?: "Category"; id: number; name: string };
+  } | null;
+};
+
 export type GetHomeArticlesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetHomeArticlesQuery = {
@@ -91,6 +108,86 @@ export type GetHomeArticlesQuery = {
   articles: Array<{ __typename?: "Article"; id: number; title: string; mainPictureUrl: string }>;
 };
 
+export const GetArticleByIdDocument = gql`
+    query GetArticleById($id: Float!) {
+  article(id: $id) {
+    id
+    title
+    body
+    mainPictureUrl
+    updatedAt
+    category {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetArticleByIdQuery__
+ *
+ * To run a query within a React component, call `useGetArticleByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetArticleByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetArticleByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetArticleByIdQuery(
+  baseOptions: ApolloReactHooks.QueryHookOptions<
+    GetArticleByIdQuery,
+    GetArticleByIdQueryVariables
+  > &
+    ({ variables: GetArticleByIdQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useQuery<GetArticleByIdQuery, GetArticleByIdQueryVariables>(
+    GetArticleByIdDocument,
+    options,
+  );
+}
+export function useGetArticleByIdLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    GetArticleByIdQuery,
+    GetArticleByIdQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useLazyQuery<GetArticleByIdQuery, GetArticleByIdQueryVariables>(
+    GetArticleByIdDocument,
+    options,
+  );
+}
+export function useGetArticleByIdSuspenseQuery(
+  baseOptions?:
+    | ApolloReactHooks.SkipToken
+    | ApolloReactHooks.SuspenseQueryHookOptions<GetArticleByIdQuery, GetArticleByIdQueryVariables>,
+) {
+  const options =
+    baseOptions === ApolloReactHooks.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return ApolloReactHooks.useSuspenseQuery<GetArticleByIdQuery, GetArticleByIdQueryVariables>(
+    GetArticleByIdDocument,
+    options,
+  );
+}
+export type GetArticleByIdQueryHookResult = ReturnType<typeof useGetArticleByIdQuery>;
+export type GetArticleByIdLazyQueryHookResult = ReturnType<typeof useGetArticleByIdLazyQuery>;
+export type GetArticleByIdSuspenseQueryHookResult = ReturnType<
+  typeof useGetArticleByIdSuspenseQuery
+>;
+export type GetArticleByIdQueryResult = ApolloReactCommon.QueryResult<
+  GetArticleByIdQuery,
+  GetArticleByIdQueryVariables
+>;
 export const GetHomeArticlesDocument = gql`
     query GetHomeArticles {
   articles(limit: 5) {

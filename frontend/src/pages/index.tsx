@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { useGetHomeArticlesQuery } from "@/graphql/generated/schema";
 
 export default function Home() {
@@ -15,20 +16,22 @@ export default function Home() {
       {!loading && !error && (
         <ul className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
           {data?.articles.map((article) => (
-            <li
-              key={article.id}
-              className="overflow-hidden rounded-xl border border-base-300 bg-base-100 shadow-sm"
-            >
-              <div className="relative h-44 w-full">
-                <Image
-                  src={article.mainPictureUrl}
-                  alt={article.title}
-                  fill
-                  sizes="(max-width: 640px) 100vw, 50vw"
-                  className="object-cover"
-                />
-              </div>
-              <h2 className="p-4 text-lg font-semibold">{article.title}</h2>
+            <li key={article.id}>
+              <Link
+                href={`/articles/${article.id}`}
+                className="block overflow-hidden rounded-xl border border-base-300 bg-base-100 shadow-sm transition hover:shadow-md"
+              >
+                <div className="relative h-44 w-full">
+                  <Image
+                    src={article.mainPictureUrl}
+                    alt={article.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, 50vw"
+                    className="object-cover"
+                  />
+                </div>
+                <h2 className="p-4 text-lg font-semibold">{article.title}</h2>
+              </Link>
             </li>
           ))}
         </ul>
