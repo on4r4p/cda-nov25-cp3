@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useGetHomeArticlesQuery } from "@/graphql/generated/schema";
 
 export default function Home() {
@@ -18,12 +19,15 @@ export default function Home() {
               key={article.id}
               className="overflow-hidden rounded-xl border border-base-300 bg-base-100 shadow-sm"
             >
-              <img
-                src={article.mainPictureUrl}
-                alt={article.title}
-                className="h-44 w-full object-cover"
-                loading="lazy"
-              />
+              <div className="relative h-44 w-full">
+                <Image
+                  src={article.mainPictureUrl}
+                  alt={article.title}
+                  fill
+                  sizes="(max-width: 640px) 100vw, 50vw"
+                  className="object-cover"
+                />
+              </div>
               <h2 className="p-4 text-lg font-semibold">{article.title}</h2>
             </li>
           ))}
