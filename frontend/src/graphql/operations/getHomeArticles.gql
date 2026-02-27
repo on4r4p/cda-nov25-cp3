@@ -1,0 +1,7 @@
+query GetHomeArticles {
+  articles(limit: 5) {
+    id
+    title
+    mainPictureUrl
+  }
+}
