@@ -6,15 +6,26 @@ export default function Home() {
   const { data, loading, error } = useGetHomeArticlesQuery();
 
   return (
-    <main className="mx-auto w-full max-w-5xl px-4 py-8">
+    <main id="main-content" tabIndex={-1} className="mx-auto w-full max-w-5xl px-4 py-8">
       <h1 className="text-3xl font-bold">Last news</h1>
 
-      {loading && <p className="mt-4">Loading news</p>}
+      {loading && (
+        <p className="mt-4" aria-live="polite">
+          Loading news
+        </p>
+      )}
 
-      {error && <p className="mt-4 text-red-600">Can't load news.</p>}
+      {error && (
+        <p className="mt-4 text-red-700" role="alert">
+          Can't load news.
+        </p>
+      )}
 
       {!loading && !error && (
-        <ul className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <ul
+          className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2"
+          aria-label="Latest articles list"
+        >
           {data?.articles.map((article) => (
             <li key={article.id}>
               <Link

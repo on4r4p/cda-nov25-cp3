@@ -1,11 +1,16 @@
-import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { type FormEvent, useEffect, useState } from "react";
 import { useCreateArticleMutation, useGetCategoriesQuery } from "@/graphql/generated/schema";
 
 export default function NewArticlePage() {
   const router = useRouter();
-  const { data: categoriesData, loading: categoriesLoading, error: categoriesError } = useGetCategoriesQuery();
-  const [createArticle, { loading: creatingArticle, error: createArticleError }] = useCreateArticleMutation();
+  const {
+    data: categoriesData,
+    loading: categoriesLoading,
+    error: categoriesError,
+  } = useGetCategoriesQuery();
+  const [createArticle, { loading: creatingArticle, error: createArticleError }] =
+    useCreateArticleMutation();
 
   const [title, setTitle] = useState("");
   const [mainPictureUrl, setMainPictureUrl] = useState("");
@@ -60,13 +65,15 @@ export default function NewArticlePage() {
   }
 
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 py-8">
+    <main id="main-content" tabIndex={-1} className="mx-auto w-full max-w-3xl px-4 py-8">
       <h1 className="text-3xl font-bold">Write an article</h1>
+      <p className="mt-2 text-base-content">All fields are required.</p>
 
       <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-        <fieldset className="fieldset">
+        <fieldset className="fieldset" aria-describedby="title-help">
           <legend className="fieldset-legend">Title</legend>
           <input
+            id="title"
             type="text"
             value={title}
             onChange={(event) => setTitle(event.target.value)}
@@ -74,11 +81,15 @@ export default function NewArticlePage() {
             className="input input-bordered w-full"
             required
           />
+          <p id="title-help" className="text-sm text-base-content">
+            Enter a clear and descriptive article title.
+          </p>
         </fieldset>
 
-        <fieldset className="fieldset">
+        <fieldset className="fieldset" aria-describedby="image-help">
           <legend className="fieldset-legend">Main image URL</legend>
           <input
+            id="main-image-url"
             type="url"
             value={mainPictureUrl}
             onChange={(event) => setMainPictureUrl(event.target.value)}
@@ -86,11 +97,15 @@ export default function NewArticlePage() {
             className="input input-bordered w-full"
             required
           />
+          <p id="image-help" className="text-sm text-base-content">
+            Provide a valid HTTPS image URL.
+          </p>
         </fieldset>
 
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Category</legend>
           <select
+            id="category"
             className="select select-bordered w-full"
             value={categoryId}
             onChange={(event) => setCategoryId(event.target.value)}
@@ -108,6 +123,7 @@ export default function NewArticlePage() {
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Article body</legend>
           <textarea
+            id="article-body"
             value={body}
             onChange={(event) => setBody(event.target.value)}
             placeholder="Write your article content..."
@@ -116,11 +132,27 @@ export default function NewArticlePage() {
           />
         </fieldset>
 
-        {categoriesError && <p className="text-red-600">Could not load categories.</p>}
-        {formError && <p className="text-red-600">{formError}</p>}
-        {createArticleError && <p className="text-red-600">Could not create the article.</p>}
+        {categoriesError && (
+          <p className="text-red-700" role="alert">
+            Could not load categories.
+          </p>
+        )}
+        {formError && (
+          <p className="text-red-700" role="alert">
+            {formError}
+          </p>
+        )}
+        {createArticleError && (
+          <p className="text-red-700" role="alert">
+            Could not create the article.
+          </p>
+        )}
 
-        <button type="submit" className="btn btn-primary" disabled={creatingArticle || categoriesLoading}>
+        <button
+          type="submit"
+          className="btn btn-primary"
+          disabled={creatingArticle || categoriesLoading}
+        >
           {creatingArticle ? "Creating article..." : "Create article"}
         </button>
       </form>

@@ -9,16 +9,20 @@ export default function HeaderLayout() {
   return (
     <header className="border-b border-base-300 bg-base-100">
       <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-4 py-3">
-        <Link href="/" className="text-2xl font-extrabold tracking-tight">
+        <Link
+          href="/"
+          className="text-2xl font-extrabold tracking-tight focus-visible:rounded-sm"
+          aria-label="Go to homepage"
+        >
           Dev Blob
         </Link>
 
         <div className="flex w-full max-w-xl items-center gap-2">
-          <form action="/search" method="get" className="flex-1">
+          <form action="/search" method="get" className="flex-1" aria-label="Site search">
             <label className="sr-only" htmlFor="header-search">
               Search articles
             </label>
-            <div className="input input-bordered flex w-full items-center gap-2">
+            <div className="input input-bordered flex w-full items-center gap-2 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-base-content">
               <input
                 id="header-search"
                 name="title"
@@ -27,17 +31,17 @@ export default function HeaderLayout() {
                 defaultValue={currentTitle}
                 className="grow border-0 bg-transparent p-0 focus:outline-none"
               />
-              <button
-                type="submit"
-                aria-label="Search articles"
-                className="shrink-0 rounded p-1"
-              >
+              <button type="submit" aria-label="Search articles" className="shrink-0 rounded p-1">
                 <Image src="/google.png" alt="" width={18} height={18} aria-hidden="true" />
               </button>
             </div>
           </form>
 
-          <Link href="/articles/new" className="btn btn-primary whitespace-nowrap">
+          <Link
+            href="/articles/new"
+            className="btn btn-primary whitespace-nowrap"
+            aria-label="Write a new article"
+          >
             Write an article
           </Link>
         </div>

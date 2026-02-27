@@ -30,3 +30,8 @@ body,
 main {
   flex-grow: 1;
 }
+
+*:focus-visible {
+  outline: 2px solid #111827;
+  outline-offset: 2px;
+}

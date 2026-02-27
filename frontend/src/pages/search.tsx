@@ -36,27 +36,37 @@ export default function SearchPage() {
   });
 
   return (
-    <main className="mx-auto w-full max-w-5xl px-4 py-8">
+    <main id="main-content" tabIndex={-1} className="mx-auto w-full max-w-5xl px-4 py-8">
       <h1 className="text-3xl font-bold">Search results</h1>
 
       {searchTerm ? (
-        <p className="mt-2 text-base-content/80">
+        <p className="mt-2 text-base-content">
           Results for: <span className="font-semibold">{searchTerm}</span>
         </p>
       ) : (
-        <p className="mt-2 text-base-content/80">Type a search term in the header search box.</p>
+        <p className="mt-2 text-base-content">Type a search term in the header search box.</p>
       )}
 
-      {loading && <p className="mt-6">Searching articles...</p>}
+      {loading && (
+        <p className="mt-6" aria-live="polite">
+          Searching articles...
+        </p>
+      )}
 
-      {error && <p className="mt-6 text-red-600">Could not load search results.</p>}
+      {error && (
+        <p className="mt-6 text-red-700" role="alert">
+          Could not load search results.
+        </p>
+      )}
 
       {!skip && !loading && !error && data?.articles.length === 0 && (
-        <p className="mt-6">No articles found.</p>
+        <p className="mt-6" aria-live="polite">
+          No articles found.
+        </p>
       )}
 
       {!skip && !loading && !error && (data?.articles.length ?? 0) > 0 && (
-        <ul className="mt-6 grid grid-cols-1 gap-6">
+        <ul className="mt-6 grid grid-cols-1 gap-6" aria-label="Search results list">
           {data?.articles.map((article) => (
             <li key={article.id}>
               <Link
@@ -75,10 +85,10 @@ export default function SearchPage() {
 
                 <div>
                   <h2 className="text-xl font-semibold">{article.title}</h2>
-                  <p className="mt-1 text-sm text-base-content/70">
+                  <p className="mt-1 text-sm text-base-content">
                     Category: {article.category?.name ?? "Uncategorized"}
                   </p>
-                  <p className="mt-3 text-base-content/80">{getSnippet(article.body)}</p>
+                  <p className="mt-3 text-base-content">{getSnippet(article.body)}</p>
                 </div>
               </Link>
             </li>
