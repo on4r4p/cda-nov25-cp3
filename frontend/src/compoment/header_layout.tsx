@@ -8,7 +8,7 @@ export default function HeaderLayout() {
 
   return (
     <header className="border-b border-base-300 bg-base-100">
-      <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-4 py-3">
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
         <Link
           href="/"
           className="text-2xl font-extrabold tracking-tight focus-visible:rounded-sm"
@@ -17,8 +17,8 @@ export default function HeaderLayout() {
           Dev Blob
         </Link>
 
-        <div className="flex w-full max-w-xl items-center gap-2">
-          <form action="/search" method="get" className="flex-1" aria-label="Site search">
+        <div className="flex w-full flex-col gap-2 sm:max-w-xl sm:flex-row sm:items-center">
+          <form action="/search" method="get" className="w-full sm:flex-1" aria-label="Site search">
             <label className="sr-only" htmlFor="header-search">
               Search articles
             </label>
@@ -39,7 +39,7 @@ export default function HeaderLayout() {
 
           <Link
             href="/articles/new"
-            className="btn btn-primary whitespace-nowrap"
+            className="btn btn-primary w-full whitespace-nowrap sm:w-auto"
             aria-label="Write a new article"
           >
             Write an article
