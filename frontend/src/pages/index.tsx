@@ -6,11 +6,11 @@ export default function Home() {
 
   return (
     <main className="mx-auto w-full max-w-5xl px-4 py-8">
-      <h1 className="text-3xl font-bold">Derniers articles</h1>
+      <h1 className="text-3xl font-bold">Last news</h1>
 
-      {loading && <p className="mt-4">Chargement des articles...</p>}
+      {loading && <p className="mt-4">Loading news</p>}
 
-      {error && <p className="mt-4 text-red-600">Impossible de charger les articles.</p>}
+      {error && <p className="mt-4 text-red-600">Can't load news.</p>}
 
       {!loading && !error && (
         <ul className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
