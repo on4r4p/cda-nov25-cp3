@@ -26,9 +26,21 @@ export class ArticleResolver {
     @Arg("limit", { nullable: true }) limit?: number,
     @Arg("offset", { nullable: true }) offset?: number
   ): Promise<Article[]> {
-    const where = title
-      ? { title: Raw((alias) => `LOWER(${alias}) LIKE LOWER(:title)`, { title: `%${title}%` }) }
-      : {};
+    const normalizedTitle = title?.trim();
+    const where = normalizedTitle
+      ? [
+          {
+            title: Raw((alias) => `LOWER(${alias}) LIKE LOWER(:search)`, {
+              search: `%${normalizedTitle}%`,
+            }),
+          },
+          {
+            body: Raw((alias) => `LOWER(${alias}) LIKE LOWER(:search)`, {
+              search: `%${normalizedTitle}%`,
+            }),
+          },
+        ]
+      : undefined;
 
     return Article.find({
       where,

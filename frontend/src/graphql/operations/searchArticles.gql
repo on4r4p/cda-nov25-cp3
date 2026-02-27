@@ -1,0 +1,13 @@
+query SearchArticles($title: String) {
+  articles(title: $title, limit: 50) {
+    id
+    title
+    body
+    mainPictureUrl
+    updatedAt
+    category {
+      id
+      name
+    }
+  }
+}
