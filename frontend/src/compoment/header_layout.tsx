@@ -18,19 +18,19 @@ export default function HeaderLayout() {
             <label className="sr-only" htmlFor="header-search">
               Search articles
             </label>
-            <div className="relative">
+            <div className="input input-bordered flex w-full items-center gap-2">
               <input
                 id="header-search"
                 name="title"
                 type="text"
                 placeholder="Search articles..."
                 defaultValue={currentTitle}
-                className="input input-bordered w-full pr-11"
+                className="grow border-0 bg-transparent p-0 focus:outline-none"
               />
               <button
                 type="submit"
                 aria-label="Search articles"
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1"
+                className="shrink-0 rounded p-1"
               >
                 <Image src="/google.png" alt="" width={18} height={18} aria-hidden="true" />
               </button>
