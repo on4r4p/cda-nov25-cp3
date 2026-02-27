@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useGetArticleByIdQuery } from "@/graphql/generated/schema";
+import { useDeleteArticleMutation, useGetArticleByIdQuery } from "@/graphql/generated/schema";
 
 function formatUpdatedAt(dateString: string): string {
   const date = new Date(dateString);
@@ -9,7 +9,7 @@ function formatUpdatedAt(dateString: string): string {
     return dateString;
   }
 
-  return new Intl.DateTimeFormat("fr-FR", {
+  return new Intl.DateTimeFormat("en-US", {
     dateStyle: "long",
     timeStyle: "short",
   }).format(date);
@@ -20,6 +20,7 @@ export default function ArticleDetailsPage() {
   const { id } = router.query;
   const articleId = Array.isArray(id) ? Number(id[0]) : Number(id);
   const shouldSkip = !router.isReady || !Number.isFinite(articleId);
+  const [deleteArticle, { loading: deletingArticle, error: deleteArticleError }] = useDeleteArticleMutation();
 
   const { data, loading, error } = useGetArticleByIdQuery({
     variables: { id: articleId },
@@ -29,7 +30,7 @@ export default function ArticleDetailsPage() {
   if (!router.isReady || loading) {
     return (
       <main className="mx-auto w-full max-w-5xl px-4 py-8">
-        <p>Chargement de l&apos;article...</p>
+        <p>Loading article...</p>
       </main>
     );
   }
@@ -37,17 +38,37 @@ export default function ArticleDetailsPage() {
   if (error) {
     return (
       <main className="mx-auto w-full max-w-5xl px-4 py-8">
-        <p className="text-red-600">Impossible de charger l&apos;article.</p>
+        <p className="text-red-600">Could not load the article.</p>
       </main>
     );
   }
 
   const article = data?.article;
 
+  async function handleDeleteArticle() {
+    if (!article) {
+      return;
+    }
+
+    const shouldDelete = window.confirm("Are you sure you would like to delete this article ?");
+
+    if (!shouldDelete) {
+      return;
+    }
+
+    const result = await deleteArticle({
+      variables: { id: article.id },
+    });
+
+    if (result.data?.deleteArticle) {
+      await router.push("/");
+    }
+  }
+
   if (!article) {
     return (
       <main className="mx-auto w-full max-w-5xl px-4 py-8">
-        <p>Article introuvable.</p>
+        <p>Article not found.</p>
       </main>
     );
   }
@@ -60,7 +81,7 @@ export default function ArticleDetailsPage() {
         <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-base-content/80">
           <p>
             <span className="font-semibold">Category:</span>{" "}
-            {article.category?.name ?? "Non classé"}
+            {article.category?.name ?? "Uncategorized"}
           </p>
           <p>
             <span className="font-semibold">Last update:</span>{" "}
@@ -68,18 +89,25 @@ export default function ArticleDetailsPage() {
           </p>
         </div>
 
-        <div className="relative h-64 w-full overflow-hidden rounded-xl border border-base-300 sm:h-96">
+        <div className="relative h-64 w-full overflow-hidden rounded-xl border border-base-300 bg-base-200 sm:h-96">
           <Image
             src={article.mainPictureUrl}
             alt={article.title}
             fill
             sizes="(max-width: 768px) 100vw, 1024px"
-            className="object-cover"
+            className="object-contain"
             priority
           />
         </div>
 
         <p className="whitespace-pre-line leading-7">{article.body}</p>
+
+        <div>
+          <button type="button" className="btn btn-error" onClick={handleDeleteArticle} disabled={deletingArticle}>
+            {deletingArticle ? "Deleting article..." : "Delete this article"}
+          </button>
+          {deleteArticleError && <p className="mt-2 text-red-600">Could not delete this article.</p>}
+        </div>
       </article>
     </main>
   );
