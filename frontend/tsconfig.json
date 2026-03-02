@@ -25,6 +25,14 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"],
+  "exclude": [
+    "node_modules",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "e2e",
+    "jest.config.ts",
+    "playwright.config.ts",
+    "playwright.global-setup.ts"
+  ],
   "typeRoots": ["../../node_modules/@heroicons/**/*.d.ts"]
 }

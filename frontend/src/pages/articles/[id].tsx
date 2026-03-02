@@ -1,19 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useDeleteArticleMutation, useGetArticleByIdQuery } from "@/graphql/generated/schema";
-
-function formatUpdatedAt(dateString: string): string {
-  const date = new Date(dateString);
-
-  if (Number.isNaN(date.getTime())) {
-    return dateString;
-  }
-
-  return new Intl.DateTimeFormat("en-US", {
-    dateStyle: "long",
-    timeStyle: "short",
-  }).format(date);
-}
+import { formatUpdatedAt } from "@/utils/article-format";
 
 export default function ArticleDetailsPage() {
   const router = useRouter();

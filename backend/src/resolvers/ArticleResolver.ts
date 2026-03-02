@@ -24,7 +24,7 @@ export class ArticleResolver {
   async articles(
     @Arg("title", { nullable: true }) title?: string,
     @Arg("limit", { nullable: true }) limit?: number,
-    @Arg("offset", { nullable: true }) offset?: number
+    @Arg("offset", { nullable: true }) offset?: number,
   ): Promise<Article[]> {
     const normalizedTitle = title?.trim();
     const where = normalizedTitle

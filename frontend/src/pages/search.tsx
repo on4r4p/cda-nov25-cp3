@@ -2,28 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSearchArticlesQuery } from "@/graphql/generated/schema";
-
-function getSearchTerm(value: string | string[] | undefined): string {
-  if (typeof value === "string") {
-    return value.trim();
-  }
-
-  if (Array.isArray(value)) {
-    return (value[0] ?? "").trim();
-  }
-
-  return "";
-}
-
-function getSnippet(body: string, maxLength = 180): string {
-  const compactBody = body.replace(/\s+/g, " ").trim();
-
-  if (compactBody.length <= maxLength) {
-    return compactBody;
-  }
-
-  return `${compactBody.slice(0, maxLength).trim()}...`;
-}
+import { getSearchTerm, getSnippet } from "@/utils/search";
 
 export default function SearchPage() {
   const router = useRouter();

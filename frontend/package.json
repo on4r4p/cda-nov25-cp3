@@ -8,7 +8,13 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write && biome check --write",
-    "codegen": "graphql-codegen --require dotenv/config --config codegen.ts"
+    "codegen": "graphql-codegen --require dotenv/config --config codegen.ts",
+    "test": "npm run test:jest",
+    "test:unit": "jest src/__tests__/unit --runInBand",
+    "test:functional": "jest src/__tests__/functional --runInBand",
+    "test:jest": "jest --runInBand",
+    "test:e2e:install": "playwright install chromium",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@apollo/client": "^4.0.9",
@@ -25,12 +31,19 @@
     "@graphql-codegen/cli": "^6.1.0",
     "@graphql-codegen/typescript-react-apollo": "^4.3.3",
     "@parcel/watcher": "^2.5.1",
+    "@playwright/test": "^1.58.2",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
     "daisyui": "^5.5.8",
+    "jest": "^30.2.0",
+    "jest-environment-jsdom": "^30.2.0",
     "typescript": "^5"
   }
 }

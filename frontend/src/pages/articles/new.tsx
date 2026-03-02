@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { type FormEvent, useEffect, useState } from "react";
 import { useCreateArticleMutation, useGetCategoriesQuery } from "@/graphql/generated/schema";
+import { validateNewArticleForm } from "@/utils/new-article-form";
 
 export default function NewArticlePage() {
   const router = useRouter();
@@ -28,28 +29,25 @@ export default function NewArticlePage() {
     event.preventDefault();
     setFormError("");
 
-    const trimmedTitle = title.trim();
-    const trimmedMainPictureUrl = mainPictureUrl.trim();
-    const trimmedBody = body.trim();
-    const parsedCategoryId = Number(categoryId);
+    const validatedForm = validateNewArticleForm({
+      title,
+      mainPictureUrl,
+      body,
+      categoryId,
+    });
 
-    if (!trimmedTitle || !trimmedMainPictureUrl || !trimmedBody) {
-      setFormError("Please fill in title, image URL, and article body.");
-      return;
-    }
-
-    if (!Number.isFinite(parsedCategoryId)) {
-      setFormError("Please choose a category.");
+    if (validatedForm.error || !validatedForm.data) {
+      setFormError(validatedForm.error ?? "Article was not created. Please try again.");
       return;
     }
 
     const result = await createArticle({
       variables: {
         data: {
-          title: trimmedTitle,
-          mainPictureUrl: trimmedMainPictureUrl,
-          body: trimmedBody,
-          category: { id: parsedCategoryId },
+          title: validatedForm.data.title,
+          mainPictureUrl: validatedForm.data.mainPictureUrl,
+          body: validatedForm.data.body,
+          category: { id: validatedForm.data.categoryId },
         },
       },
     });
@@ -70,8 +68,10 @@ export default function NewArticlePage() {
       <p className="mt-2 text-base-content">All fields are required.</p>
 
       <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-        <fieldset className="fieldset" aria-describedby="title-help">
-          <legend className="fieldset-legend">Title</legend>
+        <fieldset className="fieldset">
+          <label className="fieldset-legend" htmlFor="title">
+            Title
+          </label>
           <input
             id="title"
             type="text"
@@ -79,6 +79,7 @@ export default function NewArticlePage() {
             onChange={(event) => setTitle(event.target.value)}
             placeholder="Write your article title"
             className="input input-bordered w-full"
+            aria-describedby="title-help"
             required
           />
           <p id="title-help" className="text-sm text-base-content">
@@ -86,8 +87,10 @@ export default function NewArticlePage() {
           </p>
         </fieldset>
 
-        <fieldset className="fieldset" aria-describedby="image-help">
-          <legend className="fieldset-legend">Main image URL</legend>
+        <fieldset className="fieldset">
+          <label className="fieldset-legend" htmlFor="main-image-url">
+            Main image URL
+          </label>
           <input
             id="main-image-url"
             type="url"
@@ -95,6 +98,7 @@ export default function NewArticlePage() {
             onChange={(event) => setMainPictureUrl(event.target.value)}
             placeholder="https://example.com/image.jpg"
             className="input input-bordered w-full"
+            aria-describedby="image-help"
             required
           />
           <p id="image-help" className="text-sm text-base-content">
@@ -103,7 +107,9 @@ export default function NewArticlePage() {
         </fieldset>
 
         <fieldset className="fieldset">
-          <legend className="fieldset-legend">Category</legend>
+          <label className="fieldset-legend" htmlFor="category">
+            Category
+          </label>
           <select
             id="category"
             className="select select-bordered w-full"
@@ -121,7 +127,9 @@ export default function NewArticlePage() {
         </fieldset>
 
         <fieldset className="fieldset">
-          <legend className="fieldset-legend">Article body</legend>
+          <label className="fieldset-legend" htmlFor="article-body">
+            Article body
+          </label>
           <textarea
             id="article-body"
             value={body}
