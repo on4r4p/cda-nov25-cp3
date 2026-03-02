@@ -1,9 +1,11 @@
 import type { NextConfig } from "next";
 
+const graphqlProxyTarget = process.env.GRAPHQL_PROXY_TARGET || "http://127.0.0.1:4000";
+
 const nextConfig: NextConfig = {
-  /* config options here */
   reactCompiler: true,
   reactStrictMode: true,
+  allowedDevOrigins: ["http://127.0.0.1:3000"],
   images: {
     remotePatterns: [
       {
@@ -12,6 +14,14 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/graphql",
+        destination: graphqlProxyTarget,
+      },
+    ];
   },
 };
 
