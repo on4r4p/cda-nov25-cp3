@@ -30,7 +30,7 @@
     "**/*.test.ts",
     "**/*.test.tsx",
     "e2e",
-    "jest.config.ts",
+    "jest.config.js",
     "playwright.config.ts",
     "playwright.global-setup.ts"
   ],
