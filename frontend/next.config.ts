@@ -5,7 +5,7 @@ const graphqlProxyTarget = process.env.GRAPHQL_PROXY_TARGET || "http://127.0.0.1
 const nextConfig: NextConfig = {
   reactCompiler: true,
   reactStrictMode: true,
-  allowedDevOrigins: ["http://127.0.0.1:3000"],
+  allowedDevOrigins: ["http://localhost:3000", "http://127.0.0.1:3000"],
   images: {
     remotePatterns: [
       {

@@ -11,8 +11,7 @@ const e2eBackendOrigin = "http://127.0.0.1:4000";
 
 export const e2eFrontendEnvironment = {
   ...process.env,
-  GRAPHQL_PROXY_TARGET: e2eBackendOrigin,
-  NEXT_PUBLIC_GRAPHQL_API_URL: "/graphql",
+  NEXT_PUBLIC_GRAPHQL_API_URL: e2eBackendOrigin,
 };
 
 export const e2eBackendEnvironment = {
