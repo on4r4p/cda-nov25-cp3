@@ -19,7 +19,6 @@ env:
   DB_USER: "postgres"
   DB_PASS: "postgres"
   DB_NAME: "postgres"
-  NEXT_PUBLIC_GRAPHQL_API_URL: "http://localhost:4000"
 
 jobs:
   lint:
@@ -84,6 +83,10 @@ jobs:
 
   e2e:
     runs-on: ubuntu-latest
+    env:
+      CORS_ALLOWED_ORIGINS: "http://localhost:3000,http://127.0.0.1:3000,http://localhost:4000,http://127.0.0.1:4000"
+      NEXT_PUBLIC_GRAPHQL_API_URL: "/graphql"
+      GRAPHQL_PROXY_TARGET: "http://127.0.0.1:4000"
 
     steps:
       - name: Checkout repository
@@ -113,3 +116,13 @@ jobs:
       - name: Run Playwright suite
         working-directory: frontend
         run: npm run test:e2e
+
+      - name: Upload Playwright artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts
+          path: |
+            frontend/test-results
+            frontend/playwright-report
+          if-no-files-found: ignore
